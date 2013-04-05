@@ -6,7 +6,6 @@ import pprint
 # set up parser for configuration file
 parser = SafeConfigParser()
 parser.read('connect.cfg')
-print parser.get('rackspace', 'username')
 
 # authenticate to get access to Rackspace Cloud Services
 # issue authentication request to Rackspace Cloud Identity Services
@@ -44,8 +43,15 @@ else:
 # will need pass the token in for each request using the X-Auth-Token header
 headers = {'X-Auth-Token':token}
 r = requests.get(url, headers=headers)
-print r.text
-
+result = r.json()
+print result
+servers = result['servers']
+for server in servers:
+    print "current server: {0}".format(server)
+    server_name = server['name']
+    print "server name: {0}".format(server_name)
+    server_public_ip = server['addresses']['public']
+    print "server public ip: {0}".format(server_public_ip)
 
 
 
